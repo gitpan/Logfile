@@ -13,6 +13,9 @@
 # 
 # $Locker: pfeifer $
 # $Log: Wn.pm,v $
+# Revision 0.1.1.1  1996/06/04 14:35:31  pfeifer
+# patch13: Support for the WN http server.
+#
 # Revision 1.1  1996/05/23 13:46:05  pfeifer
 # Initial revision
 #
@@ -99,7 +102,7 @@ sub norm {
         $val =~ s/\D.*//;
     } elsif ($key eq Error) {
       $val =~ s:^\s*\(\d+/\d+\)\s+::;
-      # $val = substr($val,0,40);
+      $val = substr($val,0,$Logfile::MAXWIDTH);
       $val;
     } else {
       $val;

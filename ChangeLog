@@ -1,13 +1,28 @@
+Tue Jun  4 16:38:03 MET DST 1996   Ulrich Pfeifer <pfeifer@ls6.informatik.uni-dortmund.de>
+
+Description patch 13:
+
+	Added Apache and NCSA stuff provided by dougm@osf.org (Doug
+	MacEachern)
+
+	Now pipes a filenames do work. Eg 
+
+                "File => 'head -200 foo.log|'" 
+
+        is ok.
+
+	Support for the WN http server.
+
 Thu May 23 16:20:26 MET DST 1996   Ulrich Pfeifer <pfeifer@ls6.informatik.uni-dortmund.de>
 
-. Description:
+Description patch 12:
 
 	Added support for Wn.
 	Added $Logfile::MAXWIDTH.
 
 Tue Apr  2 10:28:00 MET DST 1996   Ulrich Pfeifer <pfeifer@ls6.informatik.uni-dortmund.de>
 
-. Description:
+Description patch 11:
 
 	Fixed typos.
 

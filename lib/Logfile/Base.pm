@@ -4,15 +4,19 @@
 # Author          : Ulrich Pfeifer
 # Created On      : Mon Mar 25 09:58:31 1996
 # Last Modified By: Ulrich Pfeifer
-# Last Modified On: Thu May 23 16:13:17 1996
+# Last Modified On: Thu May 30 17:15:19 1996
 # Language        : Perl
-# Update Count    : 179
+# Update Count    : 180
 # Status          : Unknown, Use with caution!
 # 
 # (C) Copyright 1996, Universität Dortmund, all rights reserved.
 # 
 # $Locker: pfeifer $
 # $Log: Base.pm,v $
+# Revision 0.1.1.11  1996/06/04 14:34:32  pfeifer
+# patch13: Now pipes a filenames do work. Eg "File => 'head -200
+# patch13: foo.log|'" is ok.
+#
 # Revision 0.1.1.10  1996/05/23 14:15:01  pfeifer
 # patch11: Added $Logfile::MAXWIDTH.
 #
@@ -51,7 +55,7 @@
 package Logfile::Base;
 use Carp;
 
-$Logfile::VERSION = $Logfile::VERSION = 0.112;
+$Logfile::VERSION = $Logfile::VERSION = 0.113;
 $Logfile::MAXWIDTH = 40;
 
 $Logfile::nextfh = 'fh000';
@@ -73,7 +77,7 @@ sub new {
             open(S, "gzip -cd $file|") 
                 or die "Could not open $file: $!\n";
         } else {
-            open(S, "<$file") 
+            open(S, "$file") 
                 or die "Could not open $file: $!\n";
         }
     } else {
