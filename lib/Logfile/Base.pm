@@ -4,7 +4,7 @@
 # Author          : Ulrich Pfeifer
 # Created On      : Mon Mar 25 09:58:31 1996
 # Last Modified By: Ulrich Pfeifer
-# Last Modified On: Mon Jun 15 10:49:09 1998
+# Last Modified On: Sun Feb 10 21:53:37 2002
 # Language        : Perl
 # 
 # (C) Copyright 1996, Universität Dortmund, all rights reserved.
@@ -13,16 +13,17 @@
 package Logfile::Base;
 use Carp;
 use vars qw($VERSION $nextfh);
+use strict;
 
 # $Format: "$\VERSION = sprintf '%5.3f', ($ProjectMajorVersion$ * 100 + ($ProjectMinorVersion$-1))/1000;"$
 $VERSION = sprintf '%5.3f', (2 * 100 + (3-1))/1000;
 
 $Logfile::MAXWIDTH = 40;
-my ($HaveParseDate, $HaveParseDate); 
+my ($HaveParseDate, $HaveGetDate, $HaveDateGetDate); 
 $nextfh = 'fh000';
 
 sub isafh { 
-  $f = shift; 
+  my $f = shift; 
   ref $f eq 'GLOB' 
   or ref \$f eq 'GLOB' 
   or (ref $f) =~ /^IO::/ 
@@ -130,7 +131,7 @@ sub report {
             @list = ($list);
         }
     } else {
-        @list = (Records);
+        @list = qw(Records);
     }
 
     @absolute{@list} = (0) x @list;
@@ -189,7 +190,7 @@ sub report {
                 my $br = $ba/$absolute{$list}*100;
                 printf "%9d%6.2f%% ", $ba, $br;
             } else {
-                printf "%16s", $ba;
+                printf "%15s ", $ba;
             }
         }
         print "\n";
@@ -282,7 +283,7 @@ sub new {
 	($sec,$min,$hours,$mday,$mon,$year) = localtime($time);
         #print "$par{Date} => (s>$sec,m>$min,h>$hours,m>$mday,m>$mon,y>$year)\n";
         $self->{Hour}  = sprintf "%02d", $self->{Hour}||$hours;
-        $self->{Date}  = sprintf("%02d%02d%02d", $year, $mon+1, $mday);
+        $self->{Date}  = sprintf("%02d%02d%02d", $year%100, $mon+1, $mday);
     }
     if ($par{Host}) {
         my $host = $self->{Host}   = lc($par{Host});

@@ -15,20 +15,20 @@ SYNOPSIS
       [...]
 
 DESCRIPTION
-    The Logfile extension will help you generate various reports from
+    The Logfile extension will help you to generate various reports from
     different server logfiles. In general there is no restriction as to what
     information you extract from the logfiles.
 
   Reading the files
 
-    The package can be customized by subclassing `Logfile'.
+    The package can be customized by subclassing "Logfile".
 
-    A subclass should provide a funtion `next' which reads the next record
-    from the file handle `$self->{Fh}' and returns an object of type
-    `Logfile::Record'. In addition a function `norm' may be specified to
+    A subclass should provide a function "next" which reads the next record
+    from the file handle "$self->{Fh}" and returns an object of type
+    "Logfile::Record". In addition a function "norm" may be specified to
     normalize the various record fields.
 
-    Here is a shortened version of the `Logfile::Cern' class:
+    Here is a shortened version of the "Logfile::Cern" class:
 
       package Logfile::Cern;
       @ISA = qw ( Logfile::Base ) ;
@@ -53,30 +53,30 @@ DESCRIPTION
     As stated above, in general you are free to choose the fields you enter
     in the record. But:
 
-    Date should be a valid date string. For conversion to the seconds elapsed
-         since the start of epoch the modules GetDate and Date::DateParse
-         are tried. If both cannot be `use'ed, a crude build-in module is
-         used.
+    Date should be a valid date string. For conversion to the seconds
+         elapsed since the start of epoch the modules GetDate and
+         Date::DateParse are tried. If both cannot be "use"ed, a crude
+         build-in module is used.
 
-         The record constructor replaces Date by the date in `yymmdd' form
+         The record constructor replaces Date by the date in "yymmdd" form
          to make it sortable. Also the field Hour is padded in.
 
     Host Setting Host will also set field Domain by the verbose name of the
-         country given by the the domain suffix of the fully qualified
-         domain name (hostname.domain). `foo.bar.PG' will be mapped to
-         `Papua New'. Hostnames containing no dot will be assigned to the
-         domain Local. IP numbers will be assiged to the domain Unresolved.
-         Mapping of short to long domain names is done in the Net::Country
-         extension which might be usefull in other contexts:
+         country given by the domain suffix of the fully qualified domain
+         name (hostname.domain). "foo.bar.PG" will be mapped to "Papua New".
+         Host names containing no dot will be assigned to the domain Local.
+         IP numbers will be assigned to the domain Unresolved. Mapping of
+         short to long domain names is done in the Net::Country extension
+         which might be useful in other contexts:
 
            use Net::Country;
            $germany = Net::Country::Name('de');
 
     Records
-         is always set to 1 in the `Record' constructor. So this field gives
-         the number of successful returns from the `next' function.
+         is always set to 1 in the "Record" constructor. So this field gives
+         the number of successful returns from the "next" function.
 
-    Here is the shortened optional `norm' method:
+    Here is the shortened optional "norm" method:
 
       sub norm {
           my ($self, $key, $val) = @_;
@@ -107,7 +107,7 @@ DESCRIPTION
 
     The report generator lists the fields Bytes and Records for a given
     index. The option List may be a single field name or a reference to an
-    array fo field names. It specifies which field should be listed in
+    array of field names. It specifies which field should be listed in
     addition to the Group field. List defaults to Records.
 
       $l->report(Group => Domain, List => [Bytes, Records])
@@ -154,7 +154,7 @@ DESCRIPTION
       Sweden                 2  2.11% 
       Non-Profit             1  1.05% 
       Local                  1  1.05% 
-      
+  
       $l->report(Group => Hour, List => [Bytes, Records]);
 
       Hour            Bytes          Records 
@@ -168,33 +168,39 @@ DESCRIPTION
 
   Report options
 
-    Group `=>' *field*
+    Group "=>" *field*
          Mandatory. *field* must be one of the fields passed to the
          constructor.
 
-    List `=>' *field*
-    List `=>' [*field*, *field*]
+    List "=>" *field*
+    List "=>" [*field*, *field*]
          List the subtotals for *field*s. Defaults to Records.
 
-    Sort `=>' *field*.
+    Sort "=>" *field*.
          Sort output by *field*. By default, Date and Hour are sorted in
          increasing order, whereas all other fields are sorted in decreasing
          order.
 
-    Reverse `=> 1'
+    Reverse "=> 1"
          Reverse sorting order.
 
-    Top `=>' *number*
+    Top "=>" *number*
          Print only the first *number* subtotals.
 
-    Limit `=>' *number*
+    Limit "=>" *number*
          Print only the subtotals with Sort field greater than *number*
          (less than number if sorted in increasing order).
 
     Currently reports are simply printed to STDOUT.
 
 AUTHOR
-    Ulrich Pfeifer <pfeifer@ls6.informatik.uni-dortmund.de>
+    Ulrich Pfeifer <pfeifer@wait.de>
+
+NEWS
+    Fixed y2k bug as suggested by Fred Korz. I chose the two digit version
+    to be a backward compatible as possible. The "20" will be obvious a few
+    years from now ;-) Output columns should now be separated by whitespace
+    in any case.
 
 SEE ALSO
     perl(1).

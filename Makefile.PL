@@ -5,9 +5,9 @@
 # Author          : Ulrich Pfeifer
 # Created On      : Tue Mar 26 16:20:48 1996
 # Last Modified By: Ulrich Pfeifer
-# Last Modified On: Fri May 29 14:47:58 1998
+# Last Modified On: Sun Feb 10 22:12:29 2002
 # Language        : Perl
-# Update Count    : 30
+# Update Count    : 32
 # Status          : Unknown, Use with caution!
 # 
 # (C) Copyright 1996, Universität Dortmund, all rights reserved.
@@ -58,8 +58,7 @@ if ($@ eq "") {
 WriteMakefile
   (
    'NAME'	=> 'Logfile',
-   # $Format: "   'VERSION'    => sprintf('%5.3f', ($ProjectMajorVersion$ * 100 + ( $ProjectMinorVersion$-1))/1000),"$ 
-   'VERSION'    => sprintf('%5.3f', (2 * 100 + ( 3-1))/1000),
+   'VERSION'    => '0.300',
    'dist'       => {
                     COMPRESS => 'gzip -9f',
                     PREOP    => 'pod2text Logfile.pod > README',
