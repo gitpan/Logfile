@@ -4,7 +4,7 @@
 # Author          : Ulrich Pfeifer
 # Created On      : Mon Mar 25 09:58:31 1996
 # Last Modified By: Ulrich Pfeifer
-# Last Modified On: Sun Mar  2 10:21:17 2003
+# Last Modified On: Tue Apr 29 09:08:33 2003
 # Language        : Perl
 # 
 # (C) Copyright 1996, Universität Dortmund, all rights reserved.
@@ -44,7 +44,8 @@ sub new {
       if (isafh $file) {
         $self->{Fh} = $file;
       } else {
-        *S = $self->{Fh} = "${type}::".++$nextfh;
+        *S = "${type}::".++$nextfh;
+        $self->{Fh} = *S;
         if ($file =~ /\.gz$/) {
             open(S, "gzip -cd $file|") 
                 or die "Could not open $file: $!\n";

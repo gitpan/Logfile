@@ -224,6 +224,8 @@ Ulrich Pfeifer E<lt>F<pfeifer@wait.de>E<gt>
 
 =head1 NEWS
 
+Fixed strict refs bug for perl 5.005.
+
 Fixed bug in fallback to included date parsing reported by James
 Downs.
 

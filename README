@@ -194,6 +194,8 @@ AUTHOR
     Ulrich Pfeifer <pfeifer@wait.de>
 
 NEWS
+    Fixed strict refs bug for perl 5.005.
+
     Fixed bug in fallback to included date parsing reported by James Downs.
 
     Fixed y2k bug as suggested by Fred Korz. I chose the two digit version
