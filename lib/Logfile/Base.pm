@@ -1,10 +1,10 @@
 #                              -*- Mode: Perl -*- 
 # $Basename: Base.pm $
-# $Revision: 1.2 $
+# $Revision: 1.3 $
 # Author          : Ulrich Pfeifer
 # Created On      : Mon Mar 25 09:58:31 1996
 # Last Modified By: Ulrich Pfeifer
-# Last Modified On: Fri May 29 15:28:10 1998
+# Last Modified On: Mon Jun 15 10:49:09 1998
 # Language        : Perl
 # 
 # (C) Copyright 1996, Universität Dortmund, all rights reserved.
@@ -15,7 +15,7 @@ use Carp;
 use vars qw($VERSION $nextfh);
 
 # $Format: "$\VERSION = sprintf '%5.3f', ($ProjectMajorVersion$ * 100 + ($ProjectMinorVersion$-1))/1000;"$
-$VERSION = sprintf '%5.3f', (2 * 100 + (2-1))/1000;
+$VERSION = sprintf '%5.3f', (2 * 100 + (3-1))/1000;
 
 $Logfile::MAXWIDTH = 40;
 my ($HaveParseDate, $HaveParseDate); 
@@ -346,7 +346,7 @@ $monreg = '(' . join('|', @moname) . ')';
 
 sub to_time {
     my $date = shift;
-    my($sec,$min,$hours,$mday,$mon,$year);
+    my($sec,$min,$hours,$mday,$mon,$year) = (0)x3;
 
     #print "$date => ";
     if ($date =~ s!\b(\d+)/(\d+)/(\d+)\b! !) {
