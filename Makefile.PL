@@ -14,6 +14,9 @@
 # 
 # $Locker: pfeifer $
 # $Log: Makefile.PL,v $
+# Revision 0.1.1.7  1997/01/20 09:05:27  pfeifer
+# patch15: Changed code for determining if a Date parser is available.
+#
 # Revision 0.1.1.6  1996/04/02 08:26:56  pfeifer
 # patch9: Fixed typos.
 #

@@ -4,35 +4,30 @@ require Logfile::Base;
 @ISA = qw ( Logfile::Base ) ;
 
 sub next {
-    my $self = shift;
-    my $fh = $self->{Fh};
-
-    my ($line,$host,$user,$pass,$rest,
-	$date,$req,$code,$bytes,$file,$proto,$hour);
-
-    while ($line = <$fh>) {
-	#print "$line\n";
-	($host,$user,$date,$rest) = 
-	    $line =~ m,^([^\s]+)\s+-\s+([^ ]+)\s+\[(.*?)\]\s+(.*),;
-        next unless $rest;
-	($date,$hour) = split ':', $date;
-        $rest =~ s/\"//g;
-        ($req, $file, $proto, $code, $bytes) = split ' ', $rest;
-        last if $date;
-    }
-
-    return undef unless $date;
-    $user =~ s/\s+//g;
-    $bytes = 0 unless $bytes>0;
-    #print "(h>$host,u>$user,f>$file,d>$date,r>$req,c>$code,b>$bytes)\n";
-    #print $line unless $req;
-    Logfile::Base::Record->new(Host  => $host,
-                          Date  => $date,
-                          File  => $file,
-                          Bytes => $bytes,
-                          User => $user,
-			  Hour => $hour,
-                          );
+  my $self = shift;
+  my $fh = $self->{Fh};
+  
+  my ($line,$host,$user,$pass,$rest,
+      $date,$req,$code,$bytes,$file,$proto,$hour);
+  
+  while (defined ($line = <$fh>)) {
+    ($host,$user,$date,$rest) = 
+      $line =~ m,^([^\s]+)\s+-\s+([^ ]+)\s+\[(.*?)\]\s+(.*),;
+    next unless $rest;
+    $rest =~ s/\"//g;
+    ($req, $file, $proto, $code, $bytes) = split ' ', $rest;
+    last if $date;
+  }
+  
+  return undef unless $date;
+  $user =~ s/\s+//g;
+  $bytes = 0 unless $bytes>0;
+  Logfile::Base::Record->new(Host  => $host,
+                             Date  => $date,
+                             File  => $file,
+                             Bytes => $bytes,
+                             User => $user,
+                            );
 }
 
 sub norm {

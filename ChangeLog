@@ -1,3 +1,13 @@
+Mon Jan 20 10:08:15 MET 1997   Ulrich Pfeifer <pfeifer@ls6.informatik.uni-dortmund.de>
+
+Description patch 15:
+
+	Changed code for determining if a date parser is available.
+
+	-w fix by Hugo van der Sanden.
+
+	Apacke.pm does not separate date and hour in separate fields.
+
 Tue Jun  4 16:38:03 MET DST 1996   Ulrich Pfeifer <pfeifer@ls6.informatik.uni-dortmund.de>
 
 Description patch 13:

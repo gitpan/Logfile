@@ -4,15 +4,18 @@
 # Author          : Ulrich Pfeifer
 # Created On      : Mon Mar 25 09:58:31 1996
 # Last Modified By: Ulrich Pfeifer
-# Last Modified On: Mon Sep 16 10:05:33 1996
+# Last Modified On: Mon Jan 20 10:02:10 1997
 # Language        : Perl
-# Update Count    : 190
+# Update Count    : 193
 # Status          : Unknown, Use with caution!
 # 
 # (C) Copyright 1996, Universität Dortmund, all rights reserved.
 # 
 # $Locker: pfeifer $
 # $Log: Base.pm,v $
+# Revision 0.1.1.12  1997/01/20 09:07:22  pfeifer
+# patch15: -w fix by Hugo van der Sanden.
+#
 # Revision 0.1.1.11  1996/06/04 14:34:32  pfeifer
 # patch13: Now pipes as filenames do work. Eg "File => 'head -200
 # patch13: foo.log|'" is ok.
@@ -51,7 +54,7 @@
 package Logfile::Base;
 use Carp;
 
-$Logfile::VERSION = $Logfile::VERSION = 0.114;
+$Logfile::VERSION = $Logfile::VERSION = 0.115;
 $Logfile::MAXWIDTH = 40;
 
 $Logfile::nextfh = 'fh000';
@@ -259,7 +262,10 @@ BEGIN {
     eval {require Date::GetDate};
     $Logfile::HaveDateGetDate = ($@ eq "") and import GetDate 'getdate';
     unless ($Logfile::HaveDateGetDate) {
-      eval { require Time::ParseDate };
+      eval {
+        require Time::ParseDate;
+        sub parsedate { &Time::ParseDate::parsedate(@_) }
+      };
       $Logfile::HaveParseDate = ($@ eq "");
     }
   }

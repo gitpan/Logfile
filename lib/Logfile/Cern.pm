@@ -14,6 +14,9 @@
 # 
 # $Locker: pfeifer $
 # $Log: Cern.pm,v $
+# Revision 0.1.1.4  1997/01/20 09:07:30  pfeifer
+# patch15: -w fix by Hugo van der Sanden.
+#
 # Revision 0.1.1.3  1996/05/23 14:16:28  pfeifer
 # patch11: Removed site specific stuff. Added limit to level 3 for urls.
 #
@@ -40,7 +43,7 @@ sub next {
 
     *S = $fh;
     my ($line,$host,$user,$pass,$rest,$date,$req,$code,$bytes);
-    while ($line = <S>) {
+    while (defined ($line = <S>)) {
         ($host,$user,$pass,$rest) = split ' ', $line, 4;
         next unless $rest;
         ($rest =~ s!\[([^\]]+)\]\s*!!) && ($date = $1);
