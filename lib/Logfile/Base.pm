@@ -15,7 +15,7 @@ use Carp;
 use vars qw($VERSION $nextfh);
 
 # $Format: "$\VERSION = sprintf '%5.3f', ($ProjectMajorVersion$ * 100 + ($ProjectMinorVersion$-1))/1000;"$
-$VERSION = sprintf '%5.3f', (2 * 100 + (1-1))/1000;
+$VERSION = sprintf '%5.3f', (2 * 100 + (2-1))/1000;
 
 $Logfile::MAXWIDTH = 40;
 my ($HaveParseDate, $HaveParseDate); 

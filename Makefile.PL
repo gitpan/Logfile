@@ -59,7 +59,7 @@ WriteMakefile
   (
    'NAME'	=> 'Logfile',
    # $Format: "   'VERSION'    => sprintf('%5.3f', ($ProjectMajorVersion$ * 100 + ( $ProjectMinorVersion$-1))/1000),"$ 
-   'VERSION'    => sprintf('%5.3f', (2 * 100 + ( 1-1))/1000),
+   'VERSION'    => sprintf('%5.3f', (2 * 100 + ( 2-1))/1000),
    'dist'       => {
                     COMPRESS => 'gzip -9f',
                     PREOP    => 'pod2text Logfile.pod > README',
