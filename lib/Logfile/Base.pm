@@ -4,7 +4,7 @@
 # Author          : Ulrich Pfeifer
 # Created On      : Mon Mar 25 09:58:31 1996
 # Last Modified By: Ulrich Pfeifer
-# Last Modified On: Sun Feb 10 21:53:37 2002
+# Last Modified On: Sun Mar  2 10:21:17 2003
 # Language        : Perl
 # 
 # (C) Copyright 1996, Universität Dortmund, all rights reserved.
@@ -250,6 +250,8 @@ BEGIN {
 unless ($HaveGetDate or $HaveDateGetDate
         or $HaveParseDate) {
     eval join '', <DATA>;
+    croak("Could not load my own date parsing: $@")
+      if length($@);
 }
 
 use Net::Country;
@@ -335,9 +337,9 @@ package Time::String;
 
 use Time::Local;
 
-@moname = (Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec);
-
-$monreg = '(' . join('|', @moname) . ')';
+my @moname = qw(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec);
+my %monnum;
+my $monreg = '(' . join('|', @moname) . ')';
 
 { my $i = 0;
   for (@moname) {

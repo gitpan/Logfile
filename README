@@ -20,7 +20,6 @@ DESCRIPTION
     information you extract from the logfiles.
 
   Reading the files
-
     The package can be customized by subclassing "Logfile".
 
     A subclass should provide a function "next" which reads the next record
@@ -100,7 +99,6 @@ DESCRIPTION
     report generation.
 
   Report Generation
-
     The Index to use for a report must be given as the Group parameter.
     Output is sorted by the index field unless a Sort parameter is given.
     Also the output can be truncated by a Top argument or Limit.
@@ -167,7 +165,6 @@ DESCRIPTION
       12       17396  1.25%         5  5.26% 
 
   Report options
-
     Group "=>" *field*
          Mandatory. *field* must be one of the fields passed to the
          constructor.
@@ -197,8 +194,10 @@ AUTHOR
     Ulrich Pfeifer <pfeifer@wait.de>
 
 NEWS
+    Fixed bug in fallback to included date parsing reported by James Downs.
+
     Fixed y2k bug as suggested by Fred Korz. I chose the two digit version
-    to be a backward compatible as possible. The "20" will be obvious a few
+    to be a backward compatible as possible. The 20 will be obvious a few
     years from now ;-) Output columns should now be separated by whitespace
     in any case.
 

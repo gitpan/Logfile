@@ -224,6 +224,9 @@ Ulrich Pfeifer E<lt>F<pfeifer@wait.de>E<gt>
 
 =head1 NEWS
 
+Fixed bug in fallback to included date parsing reported by James
+Downs.
+
 Fixed y2k bug as suggested by Fred Korz.  I chose the two digit
 version to be a backward compatible as possible.  The C<20> will be
 obvious a few years from now ;-) Output columns should now be
