@@ -1,0 +1,27 @@
+ChangeLog
+Logfile.pod
+MANIFEST
+Makefile.PL
+ParseDate.patch
+README
+lib/Logfile/Base.pm
+lib/Logfile/Cern.pm             # CERN http logfiles (old style)
+lib/Logfile/CernErr.pm          # CERN http error log
+lib/Logfile/SFgate.pm           # SFgate log
+lib/Logfile/Wftp.pm             # WU ftpd logfiles
+lib/Logfile/Wn.pm               # WN-1.3.5 logfiles
+lib/Logfile/WnErr.pm            # WN-1.3.5 error logfiles (same as Wn.pm)
+lib/Net/Country.pm              # Translate two-letter-country-codes to country names
+patchlevel.h
+t/cern.err
+t/cern.log
+t/cern.t
+t/cernerr.t
+t/sfgate.log
+t/sfgate.t
+t/wftp.log
+t/wftp.t
+t/wn.log
+t/wn.t
+t/wnerr.t
+t/wn.err
