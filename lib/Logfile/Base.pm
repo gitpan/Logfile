@@ -4,9 +4,9 @@
 # Author          : Ulrich Pfeifer
 # Created On      : Mon Mar 25 09:58:31 1996
 # Last Modified By: Ulrich Pfeifer
-# Last Modified On: Thu May 30 17:15:19 1996
+# Last Modified On: Mon Sep 16 10:05:33 1996
 # Language        : Perl
-# Update Count    : 180
+# Update Count    : 190
 # Status          : Unknown, Use with caution!
 # 
 # (C) Copyright 1996, Universität Dortmund, all rights reserved.
@@ -14,7 +14,7 @@
 # $Locker: pfeifer $
 # $Log: Base.pm,v $
 # Revision 0.1.1.11  1996/06/04 14:34:32  pfeifer
-# patch13: Now pipes a filenames do work. Eg "File => 'head -200
+# patch13: Now pipes as filenames do work. Eg "File => 'head -200
 # patch13: foo.log|'" is ok.
 #
 # Revision 0.1.1.10  1996/05/23 14:15:01  pfeifer
@@ -47,15 +47,11 @@
 # patch2: Renamed module to Logfile and Logfile.pm to
 # patch2: Logfile/Base.pm
 #
-# Revision 0.1.1.1  1996/03/25 11:19:14  pfeifer
-# patch1:
-#
-# 
 
 package Logfile::Base;
 use Carp;
 
-$Logfile::VERSION = $Logfile::VERSION = 0.113;
+$Logfile::VERSION = $Logfile::VERSION = 0.114;
 $Logfile::MAXWIDTH = 40;
 
 $Logfile::nextfh = 'fh000';
@@ -257,15 +253,20 @@ sub all {
 package Logfile::Base::Record;
 
 BEGIN {
-    eval "use GetDate;";
-    $Logfile::HaveGetDate = ($@ eq "");
-    unless ($Logfile::HaveGetDate) {
-        eval "use Time::ParseDate;";
-        $Logfile::HaveParseDate = ($@ eq "");
+  eval {require GetDate;};
+  $Logfile::HaveGetDate = ($@ eq "") and import GetDate 'getdate';
+  unless ($Logfile::HaveGetDate) {
+    eval {require Date::GetDate};
+    $Logfile::HaveDateGetDate = ($@ eq "") and import GetDate 'getdate';
+    unless ($Logfile::HaveDateGetDate) {
+      eval { require Time::ParseDate };
+      $Logfile::HaveParseDate = ($@ eq "");
     }
+  }
 };
 
-unless ($Logfile::HaveGetDate or $Logfile::HaveParseDate) {
+unless ($Logfile::HaveGetDate or $Logfile::HaveDateGetDate
+        or $Logfile::HaveParseDate) {
     eval join '', <DATA>;
 }
 
@@ -280,10 +281,15 @@ sub new {
     %{$self} = %par;
 
     if ($par{Date}) {
+        #print "$par{Date} => ";
         if ($Logfile::HaveGetDate) {
             $par{Date} =~ s!(\d\d\d\d):!$1 !o;
             $par{Date} =~ s!/! !go;
             $time = getdate($par{Date});
+        } elsif ($Logfile::HaveDateGetDate) {
+            $par{Date} =~ s!(\d\d\d\d):!$1 !o;
+            $par{Date} =~ s!/! !go;
+            $time = Date::GetDate::getdate($par{Date});
         } elsif ($Logfile::HaveParseDate) {
 
             $time = parsedate($par{Date},
@@ -292,8 +298,9 @@ sub new {
         } else {
             $time = &Time::String::to_time($par{Date});
         }
-        ($sec,$min,$hours,$mday,$mon,$year) = localtime($time);
-        $self->{Hour}  = sprintf "%02d", $hours;
+	($sec,$min,$hours,$mday,$mon,$year) = localtime($time);
+        #print "$par{Date} => (s>$sec,m>$min,h>$hours,m>$mday,m>$mon,y>$year)\n";
+        $self->{Hour}  = sprintf "%02d", $self->{Hour}||$hours;
         $self->{Date}  = sprintf("%02d%02d%02d", $year, $mon+1, $mday);
     }
     if ($par{Host}) {

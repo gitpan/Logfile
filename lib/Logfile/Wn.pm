@@ -4,9 +4,9 @@
 # Author          : Ulrich Pfeifer
 # Created On      : Wed May 22 13:17:07 1996
 # Last Modified By: Ulrich Pfeifer
-# Last Modified On: Thu May 23 17:21:47 1996
+# Last Modified On: Mon Aug  5 15:55:23 1996
 # Language        : CPerl
-# Update Count    : 9
+# Update Count    : 10
 # Status          : Unknown, Use with caution!
 # 
 # (C) Copyright 1996, Universität Dortmund, all rights reserved.
@@ -49,7 +49,7 @@ sub next {
     }
       if ($line =~ s/\"(.*?)\"\s+//) {
         $request = $1;
-        $request =~ s/^GET //;
+        $request =~ s/^(GET|HEAD) //;
         $request =~ s: HTTP/1.0$::;
       } else {
         next

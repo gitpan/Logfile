@@ -16,20 +16,22 @@ sub next {
 	    $line =~ m,^([^\s]+)\s+-\s+([^ ]+)\s+\[(.*?)\]\s+(.*),;
         next unless $rest;
 	($date,$hour) = split ':', $date;
-        $rest =~ s/"//g;
+        $rest =~ s/\"//g;
         ($req, $file, $proto, $code, $bytes) = split ' ', $rest;
         last if $date;
     }
 
     return undef unless $date;
     $user =~ s/\s+//g;
-    #print "($host,$user,$file,$date,$req,$code,$bytes)\n";
+    $bytes = 0 unless $bytes>0;
+    #print "(h>$host,u>$user,f>$file,d>$date,r>$req,c>$code,b>$bytes)\n";
     #print $line unless $req;
     Logfile::Base::Record->new(Host  => $host,
                           Date  => $date,
                           File  => $file,
                           Bytes => $bytes,
                           User => $user,
+			  Hour => $hour,
                           );
 }
 

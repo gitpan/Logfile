@@ -5,9 +5,9 @@
 # Author          : Ulrich Pfeifer
 # Created On      : Tue Mar 26 16:20:48 1996
 # Last Modified By: Ulrich Pfeifer
-# Last Modified On: Mon Apr  1 17:57:35 1996
+# Last Modified On: Mon Sep 16 09:53:04 1996
 # Language        : Perl
-# Update Count    : 26
+# Update Count    : 28
 # Status          : Unknown, Use with caution!
 # 
 # (C) Copyright 1996, Universität Dortmund, all rights reserved.
@@ -35,18 +35,24 @@ my $version = &get_version;
 # we do not use Date::GetDate since it dumps core with perl 5.002 (!?)
 eval "use GetDate;";
 if ($@ eq "") {
-    print "You have GetDate by Tom Christiansen.\n";
-    print "Good!\n";
+  print "You have GetDate by Tom Christiansen.\n";
+  print "Good!\n";
 } else {
+  eval "use Date::GetDate;";
+  if ($@ eq "") {
+    print "You have Date::GetDate by Tom Christiansen.\n";
+    print "Good!\n";
+  } else {
     eval "use Time::ParseDate; use Time::JulianDay;";
     if ($@ eq "") {
-        print "You have the Time-modules by David Muir Sharnoff\n";
-        print "Good!\n";
+      print "You have the Time-modules by David Muir Sharnoff\n";
+      print "Good!\n";
     } else {
-        print "You dont' have the Time-modules by David Muir Sharnoff\n";
-        print "Consider installing it!\n";
-        print "I will use my crude version though\n";
+      print "You dont' have the Time-modules by David Muir Sharnoff\n";
+      print "Consider installing it!\n";
+      print "I will use my crude version though\n";
     }    
+  }
 }
 
 WriteMakefile(
