@@ -21,7 +21,7 @@ sub next {
   
   return undef unless $date;
   $user =~ s/\s+//g;
-  $bytes = 0 unless $bytes>0;
+  $bytes = 0 unless $bytes ne '-' and $bytes>0;
   Logfile::Base::Record->new(Host  => $host,
                              Date  => $date,
                              File  => $file,

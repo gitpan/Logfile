@@ -4,9 +4,9 @@
 # Author          : Ulrich Pfeifer
 # Created On      : Wed May 22 13:17:07 1996
 # Last Modified By: Ulrich Pfeifer
-# Last Modified On: Mon Aug  5 15:55:23 1996
+# Last Modified On: Fri May 29 15:29:14 1998
 # Language        : CPerl
-# Update Count    : 10
+# Update Count    : 14
 # Status          : Unknown, Use with caution!
 # 
 # (C) Copyright 1996, Universität Dortmund, all rights reserved.
@@ -54,7 +54,7 @@ sub next {
       } else {
         next
       }
-      if ($line =~ s/(\S+)\s+(\S+)\s+//) {
+      if ($line =~ s/(\S+)\s+(\d+)\s+//) {
         $code  = $1;
         $bytes = $2;
       }
@@ -79,7 +79,7 @@ sub next {
                                         Client  => $client,
                                         Referer => $referer,
                                         File    => $request,
-                                        Bytes   => $bytes,
+                                        Bytes   => $bytes||0,
                                        )
             );
   }

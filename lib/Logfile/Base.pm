@@ -1,63 +1,32 @@
 #                              -*- Mode: Perl -*- 
-# Logfile.pm -- 
-# ITIID           : $ITI$ $Header $__Header$
+# $Basename: Base.pm $
+# $Revision: 1.2 $
 # Author          : Ulrich Pfeifer
 # Created On      : Mon Mar 25 09:58:31 1996
 # Last Modified By: Ulrich Pfeifer
-# Last Modified On: Mon Jan 20 10:02:10 1997
+# Last Modified On: Fri May 29 15:28:10 1998
 # Language        : Perl
-# Update Count    : 193
-# Status          : Unknown, Use with caution!
 # 
 # (C) Copyright 1996, Universität Dortmund, all rights reserved.
 # 
-# $Locker: pfeifer $
-# $Log: Base.pm,v $
-# Revision 0.1.1.12  1997/01/20 09:07:22  pfeifer
-# patch15: -w fix by Hugo van der Sanden.
-#
-# Revision 0.1.1.11  1996/06/04 14:34:32  pfeifer
-# patch13: Now pipes as filenames do work. Eg "File => 'head -200
-# patch13: foo.log|'" is ok.
-#
-# Revision 0.1.1.10  1996/05/23 14:15:01  pfeifer
-# patch11: Added $Logfile::MAXWIDTH.
-#
-# Revision 0.1.1.9  1996/04/02 08:27:24  pfeifer
-# patch9: Added multidimensional indexes.
-#
-# Revision 0.1.1.8  1996/04/01 09:35:59  pfeifer
-# patch8: More flexible report generation. Fields to list are now
-# patch8: completely configurable.
-#
-# Revision 0.1.1.7  1996/03/27 16:06:28  pfeifer
-# patch7: Added List and Reverse option.
-#
-# Revision 0.1.1.6  1996/03/27 14:41:41  pfeifer
-# patch6: Renamed Tools::Logfile to Logfile.
-#
-# Revision 0.1.1.5  1996/03/27 11:10:17  pfeifer
-# patch5: Added support fro Tom Christiansens GetDate.
-#
-# Revision 0.1.1.4  1996/03/26 15:17:17  pfeifer
-# patch4: Added Time/String.pm in data section.
-#
-# Revision 0.1.1.3  1996/03/26 14:53:22  pfeifer
-# patch3: Now can take advantage of the ParseDate module by David Muir
-# patch3: Sharnoff.
-#
-# Revision 0.1.1.2  1996/03/26 13:50:13  pfeifer
-# patch2: Renamed module to Logfile and Logfile.pm to
-# patch2: Logfile/Base.pm
-#
 
 package Logfile::Base;
 use Carp;
+use vars qw($VERSION $nextfh);
 
-$Logfile::VERSION = $Logfile::VERSION = 0.115;
+# $Format: "$\VERSION = sprintf '%5.3f', ($ProjectMajorVersion$ * 100 + ($ProjectMinorVersion$-1))/1000;"$
+$VERSION = sprintf '%5.3f', (2 * 100 + (1-1))/1000;
+
 $Logfile::MAXWIDTH = 40;
+my ($HaveParseDate, $HaveParseDate); 
+$nextfh = 'fh000';
 
-$Logfile::nextfh = 'fh000';
+sub isafh { 
+  $f = shift; 
+  ref $f eq 'GLOB' 
+  or ref \$f eq 'GLOB' 
+  or (ref $f) =~ /^IO::/ 
+}
 
 sub new {
     my $type = shift;
@@ -71,7 +40,10 @@ sub new {
         $self->{Group} = [$par{Group}];
     }       
     if ($file) {
-        *S = $self->{Fh} = "${type}::".++$Logfile::nextfh;
+      if (isafh $file) {
+        $self->{Fh} = $file;
+      } else {
+        *S = $self->{Fh} = "${type}::".++$nextfh;
         if ($file =~ /\.gz$/) {
             open(S, "gzip -cd $file|") 
                 or die "Could not open $file: $!\n";
@@ -79,8 +51,10 @@ sub new {
             open(S, "$file") 
                 or die "Could not open $file: $!\n";
         }
+
+      }
     } else {
-        $self->{Fh} = *STDIN;
+        $self->{Fh} = *ARGV;
     }
     bless $self, $type || ref($type);
     $self->readfile;
@@ -124,6 +98,7 @@ sub readfile {
         for $group (@group) {
             my $gname = $self->group($group);
             my $key = $self->key($group, $rec);
+
             if (defined $self->{$gname}->{$key}) {
                 $self->{$gname}->{$key}->add($rec,$group); # !!
             } else {
@@ -257,22 +232,22 @@ package Logfile::Base::Record;
 
 BEGIN {
   eval {require GetDate;};
-  $Logfile::HaveGetDate = ($@ eq "") and import GetDate 'getdate';
-  unless ($Logfile::HaveGetDate) {
+  $HaveGetDate = ($@ eq "") and import GetDate 'getdate';
+  unless ($HaveGetDate) {
     eval {require Date::GetDate};
-    $Logfile::HaveDateGetDate = ($@ eq "") and import GetDate 'getdate';
-    unless ($Logfile::HaveDateGetDate) {
+    $HaveDateGetDate = ($@ eq "") and import GetDate 'getdate';
+    unless ($HaveDateGetDate) {
       eval {
         require Time::ParseDate;
         sub parsedate { &Time::ParseDate::parsedate(@_) }
       };
-      $Logfile::HaveParseDate = ($@ eq "");
+      $HaveParseDate = ($@ eq "");
     }
   }
 };
 
-unless ($Logfile::HaveGetDate or $Logfile::HaveDateGetDate
-        or $Logfile::HaveParseDate) {
+unless ($HaveGetDate or $HaveDateGetDate
+        or $HaveParseDate) {
     eval join '', <DATA>;
 }
 
@@ -288,15 +263,15 @@ sub new {
 
     if ($par{Date}) {
         #print "$par{Date} => ";
-        if ($Logfile::HaveGetDate) {
+        if ($HaveGetDate) {
             $par{Date} =~ s!(\d\d\d\d):!$1 !o;
             $par{Date} =~ s!/! !go;
             $time = getdate($par{Date});
-        } elsif ($Logfile::HaveDateGetDate) {
+        } elsif ($HaveDateGetDate) {
             $par{Date} =~ s!(\d\d\d\d):!$1 !o;
             $par{Date} =~ s!/! !go;
             $time = Date::GetDate::getdate($par{Date});
-        } elsif ($Logfile::HaveParseDate) {
+        } elsif ($HaveParseDate) {
 
             $time = parsedate($par{Date},
                                    FUZZY => 1,

@@ -5,9 +5,9 @@
 # Author          : Ulrich Pfeifer
 # Created On      : Tue Mar 26 16:20:48 1996
 # Last Modified By: Ulrich Pfeifer
-# Last Modified On: Mon Sep 16 09:53:04 1996
+# Last Modified On: Fri May 29 14:47:58 1998
 # Language        : Perl
-# Update Count    : 28
+# Update Count    : 30
 # Status          : Unknown, Use with caution!
 # 
 # (C) Copyright 1996, Universität Dortmund, all rights reserved.
@@ -31,9 +31,6 @@
 use ExtUtils::MakeMaker;
 # See lib/ExtUtils/MakeMaker.pm for details of how to influence
 # the contents of the Makefile that is written.
-my $version = &get_version;
-
-&rewrite('lib/Logfile/Base.pm', $version);
 
 # we do not use Date::GetDate since it dumps core with perl 5.002 (!?)
 eval "use GetDate;";
@@ -58,45 +55,13 @@ if ($@ eq "") {
   }
 }
 
-WriteMakefile(
-              'NAME'	=> 'Logfile',
-              'VERSION' => $version,
-              'LIBS'	=> [''],   # e.g., '-lm' 
-              'DEFINE'	=> '',     # e.g., '-DHAVE_SOMETHING' 
-              'INC'	=> '',     # e.g., '-I/usr/include/other' 
-              'dist'    => { COMPRESS=>"gzip", SUFFIX=>"gz" },
-#              'MAN3PODS'=> {'pod/Logfile.pod' => 'Logfile.3'},
-              );
-
-sub rewrite {
-    my ($file, $version) = @_;
-    rename $file, $file.'.bak' or die "Could not rename $file: $!";
-    open(IN, $file.'.bak') || die "Could not open $file.bak: $!";
-    open(OUT, ">$file") || die "Could not open $file: $!";
-    while (<IN>) {
-        if (/^\$Logfile::VERSION = /) {
-            print OUT "\$Logfile::VERSION = \$Logfile::VERSION = $version;\n";
-        } else {
-            print OUT;
-        }
-    }
-    close(IN);
-    close(OUT);
-    unlink $file.'.bak';
-}
-
-sub get_version
-{
-    my ($version, $revision) = (5.0, 0);
-    
-    open(PATCH, "./patchlevel.h") || die "Could not open patchlevel.h: $!";
-    while (<PATCH>) {
-        if (/VERSION ([\d.]+)/) {
-            $version = $1;
-        }
-        if (/PATCHLEVEL (\d+)/) {
-            $revision = $1;
-        }
-    }
-    sprintf("%5.3f", $version + $revision/1000);
-}
+WriteMakefile
+  (
+   'NAME'	=> 'Logfile',
+   # $Format: "   'VERSION'    => sprintf('%5.3f', ($ProjectMajorVersion$ * 100 + ( $ProjectMinorVersion$-1))/1000),"$ 
+   'VERSION'    => sprintf('%5.3f', (2 * 100 + ( 1-1))/1000),
+   'dist'       => {
+                    COMPRESS => 'gzip -9f',
+                    PREOP    => 'pod2text Logfile.pod > README',
+                   },
+  );
